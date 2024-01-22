@@ -2,7 +2,7 @@ package models
 
 import "gorm.io/gorm"
 
-type Book struct {
+type BookDetail struct {
 	gorm.Model
 	BookName    string
 	Author      string

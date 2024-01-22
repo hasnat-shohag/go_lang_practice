@@ -27,7 +27,7 @@ func Connect() {
 }
 
 func migrate() {
-	db.Migrator().AutoMigrate(&models.Book{})
+	db.Migrator().AutoMigrate(&models.BookDetail{})
 }
 
 func GetDB() *gorm.DB {

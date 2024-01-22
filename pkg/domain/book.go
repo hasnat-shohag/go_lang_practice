@@ -2,21 +2,21 @@ package domain
 
 import (
 	"demo/pkg/models"
-	"go/types"
+	"demo/pkg/types"
 )
 
 // Database Interface
 type IBookRepo interface {
-	GetBooks(bookID uint) []models.Book
-	CreateBook(book *models.Book) error
-	UpdateBook(book *models.Book) error
+	GetBooks(bookID uint) []models.BookDetail
+	CreateBook(book *models.BookDetail) error
+	UpdateBook(book *models.BookDetail) error
 	DeleteBook(bookID uint) error
 }
 
 // Service Interface
 type IBookService interface {
 	GetBooks(bookID uint) ([]types.BookRequest, error)
-	CreateBook(book *models.Book) error
-	UpdateBook(book *models.Book) error
+	CreateBook(book *models.BookDetail) error
+	UpdateBook(book *models.BookDetail) error
 	DeleteBook(bookID uint) error
 }

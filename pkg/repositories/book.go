@@ -3,7 +3,6 @@ package repositories
 import (
 	"demo/pkg/domain"
 	"demo/pkg/models"
-	"demo/pkg/types"
 	"gorm.io/gorm"
 )
 
@@ -19,22 +18,37 @@ func BookDBInstance(d *gorm.DB) domain.IBookRepo {
 	}
 }
 
-func (repo *bookRepo) GetBooks(bookID uint) []models.Book
-func (repo *bookRepo) CreateBook(book *models.Book) error
-func (repo *bookRepo) UpdateBook(book *models.Book) error
-func (repo *bookRepo) DeleteBook(bookID uint) error
+func (repo *bookRepo) GetBooks(bookID uint) []models.BookDetail {
+	var book []models.BookDetail
+	var err error
 
-type BookService struct {
-	repo domain.IBookRepo
-}
-
-func BookServiceInstance(bookRepo domain.IBookRepo) domain.IBookService {
-	return &BookService{
-		repo: bookRepo,
+	if bookID != 0 {
+		err = repo.db.Where("id = ?", bookID).Find(&book).Error
+	} else {
+		err = repo.db.Find(&book).Error
 	}
+	if err != nil {
+		return []models.BookDetail{}
+	}
+	return book
+}
+func (repo *bookRepo) CreateBook(book *models.BookDetail) error {
+	if err := repo.db.Create(book).Error; err != nil {
+		return err
+	}
+	return nil
 }
 
-func (service *BookService) GetBooks(bookID uint) ([]types.BookRequest, error)
-func (service *BookService) CreateBook(book *models.Book) error
-func (service *BookService) UpdateBook(book *models.Book) error
-func (service *BookService) DeleteBook(bookID uint) error
+func (repo *bookRepo) UpdateBook(book *models.BookDetail) error {
+	if err := repo.db.Save(book).Error; err != nil {
+		return err
+	}
+	return nil
+}
+func (repo *bookRepo) DeleteBook(bookID uint) error {
+	var Book models.BookDetail
+	if err := repo.db.Where("id = ?", bookID).Delete(&Book).Error; err != nil {
+		return err
+	}
+	return nil
+}
